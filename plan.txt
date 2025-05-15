@@ -1,0 +1,40 @@
+Hackverse -
+Nav - home , team , requirements , me , about us 
+
+Home without login 
+at right sign up and login in buttons to create your profile
+at left - hackverse a one stop solution to find hackathons and find a good team 
+
+Home with login
+various ongoing hackathons right now 
+upcoming hackathons
+
+team - 1 finding a team
+       2 finding a member
+
+then on clicking it will filter the options 
+
+requirements -1. require a team 
+              why ? your skill ?  
+              2 . require a  member 
+              domain , for what , expiry - after expiry the data will be deleted from db 
+
+me - profile - your name 
+               profile picture 
+               your skills 
+               your github link
+               your linkdein account link - so connect 
+
+on signup profile page will open to create your profile 
+on login home page will open 
+
+Teams - 1 find a member -
+various profile of persons looking for a team - it will be a card that would contain their skills , their msg and beside linkdein account to connect 
+
+        2 find a team - 
+it will contain various teams looking for member - it will be a card that contain team name , their msg , their requirements and linkdein account to connect
+
+
+
+
+            
