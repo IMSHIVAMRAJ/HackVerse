@@ -4,7 +4,7 @@ import { useState } from "react"
 import one from "../assets/1.png"
 import LoginModal from "../components/LoginModal"
 import SignupModal from "../components/SignupModal"
-import HackathonPage from "./hackathon"
+import HackathonPage from "./Hackathon"
 import NavbarH from "../components/Navbar"
 
 
