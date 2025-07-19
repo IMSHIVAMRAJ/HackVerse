@@ -5,12 +5,12 @@ Home without login
 at right sign up and login in buttons to create your profile
 at left - hackverse a one stop solution to find hackathons and find a good team 
 
-Home with login
+Home with login 
 various ongoing hackathons right now 
-upcoming hackathons
+upcoming hackathons 
 
-team - 1 finding a team
-       2 finding a member
+team - 1 finding a team 
+       2 finding a member 
 
 then on clicking it will filter the options 
 
@@ -18,7 +18,7 @@ requirements -1. require a team
               why ? your skill ?  
               2 . require a  member 
               domain , for what , expiry - after expiry the data will be deleted from db 
-
+          
 me - profile - your name 
                profile picture 
                your skills 
