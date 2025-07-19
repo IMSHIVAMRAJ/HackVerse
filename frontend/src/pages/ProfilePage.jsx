@@ -36,7 +36,7 @@ const ProfilePage = () => {
           throw new Error("Please log in to view your profile")
         }
 
-        const response = await fetch("http://localhost:5000/api/user/profile", {
+       const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/profile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -132,7 +132,7 @@ const ProfilePage = () => {
         formData.append("profilePic", selectedFile)
       }
 
-      const response = await fetch("http://localhost:5000/api/user/profile", {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/user/profile`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

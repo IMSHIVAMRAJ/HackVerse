@@ -26,7 +26,7 @@ const RequirementsPage = () => {
           throw new Error("Please log in to view your requirements")
         }
 
-        const response = await fetch("http://localhost:5000/api/requirements/my", {
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/requirements/my`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
