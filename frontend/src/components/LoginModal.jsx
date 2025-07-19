@@ -14,7 +14,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
     setLoading(true);
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/auth/login`,
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/auth/login`,
         {
           email,
           password,

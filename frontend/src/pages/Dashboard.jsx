@@ -60,7 +60,7 @@ const Dashboard = () => {
     const fetchUser = async () => {
       try {
         const token = getAuthToken()
-        const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/user/profile`, {
+        const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/user/profile`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

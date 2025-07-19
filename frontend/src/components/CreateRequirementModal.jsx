@@ -26,7 +26,7 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
     setSubmitSuccess(false);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/requirements`, {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/requirements`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -119,7 +119,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       submitData.append("linkedin", formData.linkedin);
 
       const res = await axios.post(
-        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/auth/signup`,
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/auth/signup`,
         submitData,
         {
           headers: { "Content-Type": "multipart/form-data" },

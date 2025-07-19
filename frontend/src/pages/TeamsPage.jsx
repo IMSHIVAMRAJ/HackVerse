@@ -30,7 +30,7 @@ const TeamsPage = () => {
         }
 
         const response = await fetch(
-          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/requirements/team`,
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/requirements/team`,
           {
             method: "GET",
             headers,
