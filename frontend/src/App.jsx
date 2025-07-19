@@ -2,7 +2,6 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import './index.css'
 import Home1 from './pages/Home1'
-import HackathonPage from './pages/hackathon'
 import Dashboard from "./pages/Dashboard"
 import ProtectedRoute from "./components/ProtectedRoute"
 import TeamsPage from './pages/TeamsPage'
