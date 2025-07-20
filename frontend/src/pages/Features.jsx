@@ -194,54 +194,56 @@ export default function FeaturesPage() {
                 style={{ transform: `translateX(-${currentStoryIndex * 100}%)` }}
               >
                 {successStories.map((story) => (
-                  <div key={story.id} className="w-full flex-shrink-0">
-                    <Card className="bg-white border-0 rounded-none">
-                      <CardContent className="p-0">
-                        <div className="grid md:grid-cols-2 gap-0">
-                          <div className="p-12 flex flex-col justify-center">
-                            <div className="space-y-6">
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h3 className="text-3xl font-bold text-gray-800 mb-2">{story.name}</h3>
-                                  <p className="text-purple-600 font-semibold">{story.hackathon}</p>
-                                </div>
-                                <div className="text-right">
-                                  <div className="text-2xl mb-2">{story.achievement}</div>
-                                  <div className="text-3xl font-bold text-green-600">{story.prize}</div>
-                                </div>
-                              </div>
+                 <div key={story.id} className="w-full flex-shrink-0">
+  <Card className="bg-white border-0 rounded-none">
+    <CardContent className="p-0">
+      <div className="flex flex-col md:flex-row">
+        <div className="w-full md:w-1/2 p-6 lg:p-12 flex flex-col justify-center">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between flex-wrap">
+              <div>
+                <h3 className="text-3xl font-bold text-gray-800 mb-2">{story.name}</h3>
+                <p className="text-purple-600 font-semibold">{story.hackathon}</p>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl mb-2">{story.achievement}</div>
+                <div className="text-3xl font-bold text-green-600">{story.prize}</div>
+              </div>
+            </div>
 
-                              <blockquote className="text-lg text-gray-700 italic leading-relaxed border-l-4 border-purple-500 pl-6">
-                                "{story.story}"
-                              </blockquote>
+            <blockquote className="text-lg text-gray-700 italic leading-relaxed border-l-4 border-purple-500 pl-6">
+              "{story.story}"
+            </blockquote>
 
-                              <div>
-                                <p className="text-sm font-semibold text-gray-500 mb-3">TEAM MEMBERS</p>
-                                <div className="flex flex-wrap gap-2">
-                                  {story.members.map((member, idx) => (
-                                    <Badge
-                                      key={idx}
-                                      variant="outline"
-                                      className="border-purple-200 text-purple-700 bg-purple-50"
-                                    >
-                                      {member}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center p-8">
-                            <img
-                              src={story.image || "/placeholder.svg"}
-                              alt={`${story.name} team`}
-                              className="rounded-2xl shadow-lg max-w-full h-auto"
-                            />
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-500 mb-3">TEAM MEMBERS</p>
+              <div className="flex flex-wrap gap-2">
+                {story.members.map((member, idx) => (
+                  <Badge
+                    key={idx}
+                    variant="outline"
+                    className="border-purple-200 text-purple-700 bg-purple-50"
+                  >
+                    {member}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full md:w-1/2 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center p-6 lg:p-8">
+          <img
+            src={story.image || "/placeholder.svg"}
+            alt={`${story.name} team`}
+            className="rounded-2xl shadow-lg max-w-full h-auto object-cover"
+          />
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+</div>
+
                 ))}
               </div>
             </div>
