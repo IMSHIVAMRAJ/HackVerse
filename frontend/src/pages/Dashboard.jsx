@@ -7,6 +7,7 @@ import HackathonCard from "../components/HackathonCard"
 import NavbarH from "../components/NavbarH"
 import one from "../assets/8.png"
 import { getAuthToken } from "../utils/auth"
+import FeaturesPage from "./Features"
 
 const hackathons = [
   {
@@ -180,6 +181,7 @@ const Dashboard = () => {
                 <HackathonCard key={hackathon.id} hackathon={hackathon} />
               ))}
             </div>
+            <FeaturesPage />
           </div>
         </div>
       </div>
