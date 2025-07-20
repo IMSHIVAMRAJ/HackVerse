@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Users, Mail, Linkedin, Search, Filter } from "lucide-react";
 import NavbarH from "../components/NavbarH";
 import { getAuthToken } from "../utils/auth";
+import Footer from "../components/Footer";
 
 const TeamsPage = () => {
   const [teams, setTeams] = useState([]);
@@ -219,6 +220,7 @@ const TeamsPage = () => {
           )}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

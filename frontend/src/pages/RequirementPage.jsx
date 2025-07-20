@@ -5,6 +5,7 @@ import { Users, Mail, Linkedin, Edit, Calendar, MessageCircle, Settings } from "
 import NavbarH from "../components/NavbarH"
 import { getAuthToken } from "../utils/auth"
 import UpdateRequirementModal from "../components/UpdateRequirementModal"
+import Footer from "../components/Footer"
 
 const RequirementsPage = () => {
   const [requirements, setRequirements] = useState([])
@@ -198,6 +199,7 @@ const RequirementsPage = () => {
           onUpdateSuccess={handleUpdateSuccess}
         />
       )}
+      <Footer />
     </div>
   )
 }
@@ -229,6 +231,7 @@ const RequirementCard = ({ requirement, onUpdate }) => {
   const daysUntilExpiry = getDaysUntilExpiry()
 
   return (
+    <>
     <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-0 relative">
       <div className="p-6">
         {/* Header with status and time left */}
@@ -342,7 +345,10 @@ const RequirementCard = ({ requirement, onUpdate }) => {
           )}
         </div>
       </div>
+
     </div>
+   
+    </>
   )
 }
 

@@ -1,15 +1,16 @@
 import { Heart, Code, Users, Zap } from "lucide-react"
+import logo from "../assets/Frame.png"
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <footer className="bg-white border-t border-gray-200 mt-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mt-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-xl">H</span>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg">
+                <span className><img src={logo} alt="Hackverse Logo" /></span>
               </div>
               <span className="text-gray-800 font-bold text-2xl">Hackverse</span>
             </div>
