@@ -39,8 +39,9 @@ exports.registerUser = async (req, res) => {
 
 // @desc Auth user & get token
 exports.authUser = async (req, res) => {
+   console.log("✅ SIGNUP ROUTE HIT!"); 
   const { email, password } = req.body;
-
+ console.log("✅ SIGNUP ROUTE HITT!"); 
   try {
     const user = await User.findOne({ email });
 
