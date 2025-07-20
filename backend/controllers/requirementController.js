@@ -106,9 +106,13 @@ exports.deleteRequirement = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized to delete this requirement" });
     }
 
-    await requirement.remove();
+    // Corrected line
+    await requirement.deleteOne();
+
     res.json({ message: "Requirement deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Failed to delete requirement", error });
+    // It's good practice to log the actual error on the server for debugging
+    console.error(error); 
+    res.status(500).json({ message: "Failed to delete requirement", error: error.message });
   }
 };

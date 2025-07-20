@@ -167,7 +167,7 @@ const RequirementsPage = () => {
               <div className="text-gray-500 text-xl mb-4">No requirements found</div>
               <p className="text-gray-400 mb-6">You haven't created any team requirements yet.</p>
               <button
-                onClick={() => (window.location.href = "/")}
+                onClick={() => (window.location.href = "/dashboard")}
                 className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
                 Create Your First Requirement
