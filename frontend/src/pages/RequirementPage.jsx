@@ -43,7 +43,7 @@ const RequirementsPage = () => {
         }
 
         const data = await response.json()
-        console.log("Requirements data:", data) // Debug log
+        // console.log("Requirements data:", data) // Debug log
 
         // Handle different response structures
         const requirementsArray = Array.isArray(data) ? data : data.requirements || data.data || []
