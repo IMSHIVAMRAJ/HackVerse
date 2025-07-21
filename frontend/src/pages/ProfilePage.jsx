@@ -52,7 +52,7 @@ const ProfilePage = () => {
         }
 
         const data = await response.json()
-        console.log("Profile data:", data) // Debug log
+        // console.log("Profile data:", data) // Debug log
 
         // Handle different response structures
         const profile = data.user || data.profile || data
@@ -150,7 +150,7 @@ const ProfilePage = () => {
       }
 
       const result = await response.json()
-      console.log("Profile updated successfully:", result)
+      // console.log("Profile updated successfully:", result)
 
       setSuccess(true)
 

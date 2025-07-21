@@ -91,7 +91,7 @@ const UpdateRequirementModal = ({ isOpen, onClose, requirement, onUpdateSuccess,
       }
 
       const result = await response.json()
-      console.log("Requirement updated successfully:", result)
+      // console.log("Requirement updated successfully:", result)
       setSubmitSuccess(true)
 
       // Call success callback with updated data
