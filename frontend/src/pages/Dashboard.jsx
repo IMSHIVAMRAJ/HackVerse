@@ -12,7 +12,7 @@ import FeaturesPage from "./Features"
 const hackathons = [
   {
     id: 1,
-    title: "AI Innovation Challenge",
+    title: "Adobe Express Add-ons Hackathon",
     description: "Build the next generation AI application",
     teams: 156,
     prize: "$60K",
@@ -22,7 +22,7 @@ const hackathons = [
   },
   {
     id: 2,
-    title: "Web3 Builder Fest",
+    title: "Web3 Hack-A-Tone ",
     description: "Create decentralized applications",
     teams: 89,
     prize: "$25K",
@@ -32,7 +32,7 @@ const hackathons = [
   },
   {
     id: 3,
-    title: "Climate Tech Hack",
+    title: "MOSA Summer Hackathon 2025",
     description: "Solutions for climate change",
     teams: 203,
     prize: "$75K",
@@ -46,7 +46,7 @@ const hackathons = [
     description: "Solutions for climate change",
     teams: 203,
     prize: "$75K",
-    timeLeft: "1 day left",
+    timeLeft: "6 day left",
     status: "Live",
     type: "upcoming",
   },

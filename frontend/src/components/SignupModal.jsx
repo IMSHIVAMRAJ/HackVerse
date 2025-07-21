@@ -3,6 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { setAuthToken } from "../utils/auth"; // 👈 IMPORTED
 
 const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const navigate = useNavigate();
@@ -33,21 +34,15 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Check file size (limit to 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert("File size should be less than 5MB");
         return;
       }
-
-      // Check file type
       if (!file.type.startsWith("image/")) {
         alert("Please select an image file");
         return;
       }
-
-      // Create preview URL
       const previewUrl = URL.createObjectURL(file);
-
       setFormData((prev) => ({
         ...prev,
         profilePic: file,
@@ -57,11 +52,9 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   };
 
   const removeProfilePic = () => {
-    // Clean up the preview URL to prevent memory leaks
     if (formData.profilePicPreview) {
       URL.revokeObjectURL(formData.profilePicPreview);
     }
-
     setFormData((prev) => ({
       ...prev,
       profilePic: null,
@@ -125,11 +118,17 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+      
+      // 👇 **THE FIX IS HERE** 👇
+      // Get the token from the response and save it to localStorage
+      const { token } = res.data; // Adjust 'token' if your backend sends a different key
+      setAuthToken(token);
+      // --------------------------
 
       console.log("✅ Signup Success:", res.data);
       alert("Signup successful!");
       onClose();
-      navigate("/dashboard");
+      navigate("/dashboard"); // This will now work correctly
     } catch (err) {
       console.error("❌ Signup Error:", err.response?.data || err.message);
       alert(
@@ -171,7 +170,10 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="password" className="text-sm font-medium text-gray-700">
+        <label
+          htmlFor="password"
+          className="text-sm font-medium text-gray-700"
+        >
           Password *
         </label>
         <input
@@ -290,7 +292,10 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="linkedin" className="text-sm font-medium text-gray-700">
+        <label
+          htmlFor="linkedin"
+          className="text-sm font-medium text-gray-700"
+        >
           LinkedIn Profile
         </label>
         <input

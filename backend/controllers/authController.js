@@ -8,8 +8,11 @@ const generateToken = (id) => {
 };  
 
 // @desc Register new user
-exports.registerUser = async (req, res) => { 
-  const { email, password } = req.body;
+exports.registerUser = async (req, res) => {
+  // 1. Get ALL the data from the request
+  const { name, email, password, github, linkedin } = req.body;
+  const skills = JSON.parse(req.body.skills || '[]'); // Parse skills from string
+  const profilePicUrl = req.file ? req.file.path : null; // 🖼️ Get image URL from multer/cloudinary
 
   try {
     const userExists = await User.findOne({ email });
@@ -17,23 +20,37 @@ exports.registerUser = async (req, res) => {
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
-    
+
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt); // give an example of how password is hashed using this 
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     
 
+    // 2. Create the user with ALL the new fields
     const user = await User.create({
+      name,
       email,
       password: hashedPassword,
+      profilePic: profilePicUrl, // 👈 Save the image URL
+      skills,                   // 👈 Save the skills array
+      socials: {                // 👈 Save social links (adjust to your schema)
+        github: github || '',
+        linkedin: linkedin || '',
+      },
     });
 
+    // 3. Respond with more user info and the token
     res.status(201).json({
       _id: user.id,
+      name: user.name,
       email: user.email,
-      token: generateToken(user._id),
+      profilePic: user.profilePic,
+      token: generateToken(user._id), // Generate and send the auth token
     });
+    
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("SIGNUP ERROR:", error); // Log the full error on the server
+    res.status(500).json({ message: "Server error during registration." });
   }
 };
 

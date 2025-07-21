@@ -207,8 +207,8 @@ const RequirementsPage = () => {
 // Requirement Card Component
 const RequirementCard = ({ requirement, onUpdate }) => {
   const handleLinkedInClick = () => {
-    if (requirement.linkedeinProfile) {
-      window.open(requirement.linkedeinProfile, "_blank")
+    if (requirement.linkedinProfile) {
+      window.open(requirement.linkedinProfile, "_blank")
     }
   }
 
@@ -320,7 +320,7 @@ const RequirementCard = ({ requirement, onUpdate }) => {
         <div className="border-t border-gray-200 pt-4">
           <h4 className="text-sm font-medium text-gray-700 mb-3">Contact Information</h4>
           <div className="flex space-x-3">
-            {requirement.linkedeinProfile && (
+            {requirement.linkedinProfile && (
               <button
                 onClick={handleLinkedInClick}
                 className="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors flex-1 justify-center"
@@ -340,7 +340,7 @@ const RequirementCard = ({ requirement, onUpdate }) => {
             )}
           </div>
 
-          {!requirement.linkedeinProfile && !requirement.email && (
+          {!requirement.linkedinProfile && !requirement.email && (
             <div className="text-center py-2 text-gray-500 text-sm">No contact information available</div>
           )}
         </div>

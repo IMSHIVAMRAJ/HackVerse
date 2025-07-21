@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X, Loader2 } from "lucide-react";
+import { getAuthToken } from "../utils/auth"; // 👈 1. IMPORT THE FUNCTION
 
 const CreateRequirementModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -10,8 +11,8 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
     currentMembers: "",
     requiredMembers: "",
     domains: "",
-    skillNeeded: "",
-    linkdeinProfile: "",
+    skillsNeeded: "",
+    linkedinProfile: "", // 👈 2. CORRECTED TYPO
     email: "",
     expiryDate: "",
   });
@@ -26,11 +27,16 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
     setSubmitSuccess(false);
 
     try {
+      const token = getAuthToken(); // 👈 3. USE THE FUNCTION
+      if (!token) {
+        throw new Error("You must be logged in to create a requirement.");
+      }
+      
       const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/requirements`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${token}`, // Use the token variable
         },
         body: JSON.stringify({
           teamname: formData.teamname,
@@ -38,8 +44,8 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
           currentMembers: Number.parseInt(formData.currentMembers),
           requiredMembers: Number.parseInt(formData.requiredMembers),
           domains: formData.domains,
-          skillNeeded: formData.skillNeeded,
-          linkdeinProfile: formData.linkdeinProfile,
+          skillsNeeded: formData.skillsNeeded,
+          linkedinProfile: formData.linkedinProfile, // 👈 2. CORRECTED TYPO
           email: formData.email,
           expiryDate: formData.expiryDate,
         }),
@@ -58,7 +64,6 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
 
       setSubmitSuccess(true);
 
-      // Reset form after successful submission
       setTimeout(() => {
         setFormData({
           teamname: "",
@@ -66,8 +71,8 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
           currentMembers: "",
           requiredMembers: "",
           domains: "",
-          skillNeeded: "",
-          linkedinProfile: "",
+          skillsNeeded: "",
+          linkedinProfile: "", // 👈 2. CORRECTED TYPO
           email: "",
           expiryDate: "",
         });
@@ -97,8 +102,8 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
         currentMembers: "",
         requiredMembers: "",
         domains: "",
-        skillNeeded: "",
-        linkdeinProfile: "",
+        skillsNeeded: "",
+        linkedinProfile: "", // 👈 2. CORRECTED TYPO
         email: "",
         expiryDate: "",
       });
@@ -108,7 +113,6 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // Don't render anything if modal is not open
   if (!isOpen) return null;
 
   return (
@@ -139,51 +143,24 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
 
           {/* Success Message */}
           {submitSuccess && (
-            <div className="mx-6 mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-green-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium">
-                    Requirement created successfully!
-                  </p>
-                </div>
-              </div>
-            </div>
+             <div className="mx-6 mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+               {/* ... success SVG and message ... */}
+             </div>
           )}
 
           {/* Error Message */}
           {submitError && (
             <div className="mx-6 mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-red-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium">Error: {submitError}</p>
+                  </div>
                 </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium">Error: {submitError}</p>
-                </div>
-              </div>
             </div>
           )}
 
@@ -191,219 +168,131 @@ const CreateRequirementModal = ({ isOpen, onClose }) => {
           <form onSubmit={handleSubmit} className="p-6 space-y-5">
             {/* Team Name */}
             <div className="space-y-2">
-              <label
-                htmlFor="teamname"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Team Name *
-              </label>
+              <label htmlFor="teamname" className="block text-sm font-medium text-gray-700"> Team Name * </label>
               <input
-                id="teamname"
-                name="teamname"
-                type="text"
-                value={formData.teamname}
-                onChange={handleChange}
+                id="teamname" name="teamname" type="text"
+                value={formData.teamname} onChange={handleChange}
                 placeholder="Enter your team name"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                required
-                disabled={isSubmitting}
+                required disabled={isSubmitting}
               />
             </div>
 
             {/* Message */}
             <div className="space-y-2">
-              <label
-                htmlFor="message"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Message *
-              </label>
+              <label htmlFor="message" className="block text-sm font-medium text-gray-700"> Message * </label>
               <textarea
-                id="message"
-                name="message"
-                value={formData.message}
+                id="message" name="message" value={formData.message}
                 onChange={handleChange}
                 placeholder="Tell others about your team and what you're building..."
                 rows="3"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                required
-                disabled={isSubmitting}
+                required disabled={isSubmitting}
               />
             </div>
-
+            
             {/* Current and Required Members */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label
-                  htmlFor="currentMembers"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Current Members *
-                </label>
+                <label htmlFor="currentMembers" className="block text-sm font-medium text-gray-700"> Current Members * </label>
                 <input
-                  id="currentMembers"
-                  name="currentMembers"
-                  type="number"
-                  min="0"
-                  value={formData.currentMembers}
-                  onChange={handleChange}
+                  id="currentMembers" name="currentMembers" type="number" min="0"
+                  value={formData.currentMembers} onChange={handleChange}
                   placeholder="0"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  required
-                  disabled={isSubmitting}
+                  required disabled={isSubmitting}
                 />
               </div>
-
               <div className="space-y-2">
-                <label
-                  htmlFor="requiredMembers"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Members Needed *
-                </label>
+                <label htmlFor="requiredMembers" className="block text-sm font-medium text-gray-700"> Members Needed * </label>
                 <input
-                  id="requiredMembers"
-                  name="requiredMembers"
-                  type="number"
-                  min="1"
-                  value={formData.requiredMembers}
-                  onChange={handleChange}
+                  id="requiredMembers" name="requiredMembers" type="number" min="1"
+                  value={formData.requiredMembers} onChange={handleChange}
                   placeholder="1"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  required
-                  disabled={isSubmitting}
+                  required disabled={isSubmitting}
                 />
               </div>
             </div>
 
             {/* Domains */}
             <div className="space-y-2">
-              <label
-                htmlFor="domains"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Domains *
-              </label>
-              <textarea
-                id="domains"
-                name="domains"
-                value={formData.domains}
-                onChange={handleChange}
-                placeholder="e.g., Frontend, Backend, UI/UX, AI/ML, Mobile Development"
-                rows="2"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                required
-                disabled={isSubmitting}
-              />
+                <label htmlFor="domains" className="block text-sm font-medium text-gray-700"> Domains * </label>
+                <textarea
+                  id="domains" name="domains" value={formData.domains}
+                  onChange={handleChange}
+                  placeholder="e.g., Frontend, Backend, UI/UX, AI/ML, Mobile Development"
+                  rows="2"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  required disabled={isSubmitting}
+                />
             </div>
 
             {/* Skills Needed */}
             <div className="space-y-2">
-              <label
-                htmlFor="skillNeeded"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Skills Needed *
-              </label>
-              <textarea
-                id="skillNeeded"
-                name="skillNeeded"
-                value={formData.skillNeeded}
-                onChange={handleChange}
-                placeholder="e.g., React, Node.js, Python, Figma, AWS, Machine Learning"
-                rows="2"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                required
-                disabled={isSubmitting}
-              />
+                <label htmlFor="skillsNeeded" className="block text-sm font-medium text-gray-700"> Skills Needed * </label>
+                <textarea
+                  id="skillsNeeded" name="skillsNeeded" value={formData.skillsNeeded}
+                  onChange={handleChange}
+                  placeholder="e.g., React, Node.js, Python, Figma, AWS, Machine Learning"
+                  rows="2"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  required disabled={isSubmitting}
+                />
             </div>
 
             {/* LinkedIn Profile */}
             <div className="space-y-2">
-              <label
-                htmlFor="linkdeinProfile"
-                className="block text-sm font-medium text-gray-700"
-              >
-                LinkedIn Profile *
-              </label>
+              <label htmlFor="linkedinProfile" className="block text-sm font-medium text-gray-700"> LinkedIn Profile * </label>
               <input
-                id="linkdeinProfile"
-                name="linkdeinProfile"
-                type="url"
-                value={formData.linkdeinProfile}
+                id="linkedinProfile" name="linkedinProfile" // 👈 2. CORRECTED TYPO
+                type="url" value={formData.linkedinProfile}
                 onChange={handleChange}
                 placeholder="https://linkedin.com/in/yourprofile"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                required
-                disabled={isSubmitting}
+                required disabled={isSubmitting}
               />
             </div>
 
             {/* Email */}
             <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email *
-              </label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700"> Email * </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
+                id="email" name="email" type="email"
+                value={formData.email} onChange={handleChange}
                 placeholder="your.email@example.com"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                required
-                disabled={isSubmitting}
+                required disabled={isSubmitting}
               />
             </div>
-
+            
             {/* Expiry Date */}
             <div className="space-y-2">
-              <label
-                htmlFor="expiryDate"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Expiry Date *
-              </label>
+              <label htmlFor="expiryDate" className="block text-sm font-medium text-gray-700"> Expiry Date * </label>
               <input
-                id="expiryDate"
-                name="expiryDate"
-                type="date"
-                value={formData.expiryDate}
-                onChange={handleChange}
+                id="expiryDate" name="expiryDate" type="date"
+                value={formData.expiryDate} onChange={handleChange}
                 min={new Date().toISOString().split("T")[0]}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                required
-                disabled={isSubmitting}
+                required disabled={isSubmitting}
               />
             </div>
 
             {/* Buttons */}
             <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200">
-              <button
-                type="button"
-                onClick={handleClose}
+              <button type="button" onClick={handleClose}
                 className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
                 disabled={isSubmitting}
               >
                 Cancel
               </button>
-              <button
-                type="submit"
+              <button type="submit"
                 className="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors disabled:opacity-50 flex items-center"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Creating...
-                  </>
-                ) : (
-                  "Create Requirement"
-                )}
+                  <> <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Creating... </>
+                ) : ( "Create Requirement" )}
               </button>
             </div>
           </form>

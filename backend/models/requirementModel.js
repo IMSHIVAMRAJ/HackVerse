@@ -10,7 +10,7 @@ const requirementSchema = new mongoose.Schema({
   postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   message: { type: String },
   skillsNeeded: [{ type: String }],
-  linkdeinProfile: { type: String }, // this line defines the LinkedIn profile of the person posting the requirement.
+  linkedinProfile: { type: String }, // this line defines the LinkedIn profile of the person posting the requirement.
   email: { type: String }, // this line defines the email of the person posting the requirement.
   domain: { type: String },
   expiryDate: { type: Date },
