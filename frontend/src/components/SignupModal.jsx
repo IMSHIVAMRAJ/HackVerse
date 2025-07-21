@@ -125,7 +125,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       setAuthToken(token);
       // --------------------------
 
-      console.log("✅ Signup Success:", res.data);
+     
       alert("Signup successful!");
       onClose();
       navigate("/dashboard"); // This will now work correctly

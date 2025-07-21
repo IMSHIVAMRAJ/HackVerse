@@ -24,7 +24,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
       // ✅ Correct way to store token
       setAuthToken(res.data.token, true);
 
-      console.log("✅ Login Success:", res.data);
+  
       alert("Login successful!");
       onClose();
       navigate("/dashboard");
