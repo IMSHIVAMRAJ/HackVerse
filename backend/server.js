@@ -11,7 +11,8 @@ const app = express();
 const corsOptions = {
   origin: [
     'http://localhost:5173',
-    'https://hack-verse-sr.vercel.app'
+    'https://hack-verse-sr.vercel.app',
+     'https://hack-versee.vercel.app'
   ],
   credentials: true,
   optionsSuccessStatus: 200 // For legacy browser support
