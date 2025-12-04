@@ -23,13 +23,16 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
           const token = getAuthToken()
           if (!token) return
 
-          const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/user/profile`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          const response = await fetch(
+            `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/user/profile`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
 
           if (response.ok) {
             const data = await response.json()
@@ -50,7 +53,7 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
 
   const handleNavigation = (path) => {
     navigate(path)
-    setIsMobileMenuOpen(false) // close mobile menu after navigation
+    setIsMobileMenuOpen(false)
   }
 
   const handleLogout = () => {
@@ -95,6 +98,7 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
     <>
       <nav className="px-6 py-2 bg-gradient-to-r from-[#818CF8] via-[#818CF8] to-[#B47DFA] text-white backdrop-blur-sm sticky top-0 z-50 border-b border-white/10">
         <div className="flex items-center justify-between">
+
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <img src={logo || "/placeholder.svg"} alt="logo" className="h-6 w-6" />
@@ -106,7 +110,7 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
             </button>
           </div>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -127,7 +131,7 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
             )}
           </div>
 
-          {/* Right Side (Buttons or Avatar) */}
+          {/* Right Side (Avatar / Login Buttons) */}
           <div className="hidden md:flex items-center space-x-3">
             {isLoggedIn ? (
               <div className="relative">
@@ -144,18 +148,33 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
                   )}
                 </button>
 
+                {/* Dropdown */}
                 {isDropdownOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)}></div>
+
                     <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-50 border border-gray-200">
                       <div className="py-1">
                         <div className="px-4 py-3 border-b border-gray-200">
                           <p className="text-sm font-medium text-gray-900">{userProfile.name || "User"}</p>
                           <p className="text-xs text-gray-500">Manage your account</p>
                         </div>
-                        <button onClick={() => { handleNavigation("/profile"); setIsDropdownOpen(false) }} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><User className="mr-3 h-4 w-4" />My Profile</button>
+
+                        <button
+                          onClick={() => { handleNavigation("/profile"); setIsDropdownOpen(false) }}
+                          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <User className="mr-3 h-4 w-4" /> My Profile
+                        </button>
+
                         <hr className="my-1" />
-                        <button onClick={handleLogout} className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100"><LogOut className="mr-3 h-4 w-4" />Log out</button>
+
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                        >
+                          <LogOut className="mr-3 h-4 w-4" /> Log out
+                        </button>
                       </div>
                     </div>
                   </>
@@ -170,7 +189,7 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
           </div>
         </div>
 
-        {/* Mobile Nav Links (when open) */}
+        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden mt-2 space-y-2">
             {isLoggedIn ? (
@@ -191,7 +210,11 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
         )}
       </nav>
 
-      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} onLoginSuccess={handleLoginSuccess} />
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </>
   )
 }

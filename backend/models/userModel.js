@@ -8,6 +8,11 @@ const userSchema = new mongoose.Schema({
   skills: [{ type: String }],
   github: { type: String },
   linkedin: { type: String },
+ 
+
+membershipType: { type: String },
+wantTeam: { type: Boolean, default: false },
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

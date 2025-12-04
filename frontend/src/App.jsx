@@ -7,6 +7,8 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import TeamsPage from './pages/TeamsPage'
 import RequirementsPage from './pages/RequirementPage'
 import ProfilePage from './pages/ProfilePage'
+import ChatsList from './pages/ChatsList'
+import ChatPage from './pages/ChatPage'
 
 const App = () => {
   return (
@@ -48,6 +50,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/chat/:conversationId" element={<ChatPage />} />
+<Route path="/chats" element={<ChatsList />} />
+        
       </Routes>
     </BrowserRouter>
   )

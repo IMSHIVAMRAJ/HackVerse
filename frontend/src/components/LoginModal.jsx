@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { setAuthToken } from "../utils/auth";
+import { socket } from "../socket";
 
 const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
   const navigate = useNavigate();
@@ -12,19 +13,26 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
 
   const handleLogin = async () => {
     setLoading(true);
+
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/auth/login`,
         {
-          email,
-          password,
+          email: trimmedEmail,
+          password: trimmedPassword,
         }
       );
 
-      // ✅ Correct way to store token
+      // Save token + user ID
       setAuthToken(res.data.token, true);
+      localStorage.setItem("userId", res.data._id);
 
-  
+      // 🔥 REGISTER USER ON SOCKET
+      socket.emit("register", res.data._id);
+
       alert("Login successful!");
       onClose();
       navigate("/dashboard");
@@ -61,7 +69,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
 
             <div className="space-y-5">
               <div className="space-y-2">
-                <label htmlFor="email">Email Address</label>
+                <label>Email Address</label>
                 <input
                   type="email"
                   value={email}
@@ -72,7 +80,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="password">Password</label>
+                <label>Password</label>
                 <input
                   type="password"
                   value={password}

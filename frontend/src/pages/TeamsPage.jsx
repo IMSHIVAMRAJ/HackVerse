@@ -1,47 +1,77 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Users, Mail, Linkedin, Search, Filter } from "lucide-react";
+import { Users, Search, MessageCircle } from "lucide-react";
 import NavbarH from "../components/NavbarH";
 import { getAuthToken } from "../utils/auth";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
+// ========================================================
+// Motivational Sticker
+// ========================================================
+
+const MotivationalSticker = () => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    whileHover={{ scale: 1.05 }}
+    className="p-4 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 shadow-sm border border-indigo-100 flex items-center gap-4"
+  >
+    <motion.div
+      animate={{ y: [0, -4, 0] }}
+      transition={{ repeat: Infinity, duration: 1.6 }}
+      className="text-3xl"
+    >
+      🤝
+    </motion.div>
+
+    <div>
+      <p className="text-sm text-gray-600">Teamwork = 50% Victory 😎</p>
+      <p className="font-semibold text-gray-800">Find your perfect squad!</p>
+    </div>
+  </motion.div>
+);
+
+// ========================================================
+// MAIN PAGE
+// ========================================================
 
 const TeamsPage = () => {
   const [teams, setTeams] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
   const [filteredTeams, setFilteredTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(null);
 
-  // Fetch teams from backend
+  // ---------------- FETCH TEAMS ----------------
   useEffect(() => {
     const fetchTeams = async () => {
       try {
         setLoading(true);
-        setError(null);
-
         const token = getAuthToken();
-        const headers = { "Content-Type": "application/json" };
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
-        }
 
-        const response = await fetch(
+        const res = await fetch(
           `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/requirements/team`,
-          { method: "GET", headers }
+          {
+            headers: {
+              "Content-Type": "application/json",
+              ...(token && { Authorization: `Bearer ${token}` }),
+            },
+          }
         );
 
-        if (!response.ok) {
-          throw new Error(`Failed to fetch teams: ${response.status} ${response.statusText}`);
-        }
+        if (!res.ok) throw new Error("Failed to load teams");
 
-        const data = await response.json();
-        const teamsArray = Array.isArray(data) ? data : data.teams || data.data || [];
-        setTeams(teamsArray);
-        setFilteredTeams(teamsArray);
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : data?.teams || [];
+        const safe = list.filter((t) => t && typeof t === "object");
+
+        setTeams(safe);
+        setFilteredTeams(safe);
       } catch (err) {
         setError(err.message);
-        console.error("Error fetching teams:", err);
       } finally {
         setLoading(false);
       }
@@ -50,242 +80,224 @@ const TeamsPage = () => {
     fetchTeams();
   }, []);
 
-  // Filter teams based on search term
+  // ---------------- SEARCH FILTER ----------------
   useEffect(() => {
-    if (!searchTerm) {
-      setFilteredTeams(teams);
-    } else {
-      const filtered = teams.filter((team) => {
-        const searchTermLower = searchTerm.toLowerCase();
-        // Handle both string and array for domains/skills
-        const domainsMatch = Array.isArray(team.domains)
-          ? team.domains.some(d => d.toLowerCase().includes(searchTermLower))
-          : team.domains?.toLowerCase().includes(searchTermLower);
-        
-        const skillsMatch = Array.isArray(team.skillsNeeded)
-          ? team.skillsNeeded.some(s => s.toLowerCase().includes(searchTermLower))
-          : team.skillsNeeded?.toLowerCase().includes(searchTermLower);
+    const s = searchTerm.toLowerCase();
 
-        return (
-          team.teamname?.toLowerCase().includes(searchTermLower) ||
-          domainsMatch ||
-          team.message?.toLowerCase().includes(searchTermLower) ||
-          skillsMatch
-        );
-      });
-      setFilteredTeams(filtered);
-    }
+    if (!s) return setFilteredTeams(teams);
+
+    setFilteredTeams(
+      teams.filter((t) => {
+        const tn = t.teamname?.toLowerCase() || "";
+        const msg = t.message?.toLowerCase() || "";
+        const dom = t.domains?.join(" ").toLowerCase() || "";
+        const skl = t.skillsNeeded?.join(" ").toLowerCase() || "";
+
+        return tn.includes(s) || msg.includes(s) || dom.includes(s) || skl.includes(s);
+      })
+    );
   }, [searchTerm, teams]);
 
-  if (loading) {
-    // Return Loading UI
+  // ---------------- LOADING ----------------
+  if (loading)
     return (
-        <div className="min-h-screen" style={{background: "linear-gradient(135deg, #667EEA 0%, #705EBD 50%, #764CA4 100%)"}}>
-          <NavbarH userProfile={{ name: "Shivam" }} />
-          <div className="container mx-auto px-8 py-16">
-            <div className="flex justify-center items-center min-h-[400px]">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-                <div className="text-white text-xl">Loading teams...</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-  }
+      <div className="min-h-screen flex items-center justify-center text-xl text-gray-600">
+        Loading teams…
+      </div>
+    );
 
-  if (error) {
-    // Return Error UI
+  // ---------------- ERROR ----------------
+  if (error)
     return (
-        <div className="min-h-screen" style={{background: "linear-gradient(135deg, #667EEA 0%, #705EBD 50%, #764CA4 100%)"}}>
-          <NavbarH userProfile={{ name: "Shivam" }} />
-          <div className="container mx-auto px-8 py-16">
-            <div className="flex justify-center items-center min-h-[400px]">
-              <div className="text-center">
-                <div className="text-red-300 text-xl mb-4">⚠️ Error Loading Teams</div>
-                <div className="text-red-200 text-sm">{error}</div>
-                <button onClick={() => window.location.reload()} className="mt-4 px-6 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors">Try Again</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-  }
+      <div className="min-h-screen flex items-center justify-center text-xl text-red-500">
+        {error}
+      </div>
+    );
 
+  // ---------------- MAIN RETURN ----------------
   return (
-    <div className="min-h-screen" style={{background: "linear-gradient(135deg, #667EEA 0%, #705EBD 50%, #764CA4 100%)"}}>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-200">
       <NavbarH userProfile={{ name: "Shivam" }} />
 
-      {/* Header Section */}
-      <div className="container mx-auto px-8 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6">Find Your Team</h1>
-          <p className="text-xl text-white/90 font-medium mb-4">Connect with amazing teams looking for talented members</p>
-          <div className="flex items-center justify-center text-white/80 text-lg mb-8">
-            <span className="mr-3 text-2xl">🤝</span>
-            <span>Join forces and build something incredible together!</span>
-          </div>
-          {/* Search Bar */}
-          <div className="max-w-md mx-auto relative">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <input
-                type="text"
-                placeholder="Search teams by name, domain, or skills..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-lg border-0 bg-white/90 backdrop-blur-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50"
-              />
-            </div>
-          </div>
+      <div className="container mx-auto px-8 pt-16">
+        <h1 className="text-5xl font-bold text-center mb-4">Find Your Team</h1>
+
+        <div className="flex justify-center mb-10">
+          <MotivationalSticker />
+        </div>
+
+        {/* ---------------- SEARCH BAR ---------------- */}
+        <div className="max-w-md mx-auto relative mb-12">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" />
+          <input
+            type="text"
+            className="w-full pl-10 pr-4 py-3 rounded-lg border shadow-sm bg-white"
+            placeholder="Search teams, skills or domains..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
       </div>
 
-      {/* Teams Section */}
-      <div className="bg-gray-50 min-h-screen">
-        <div className="container mx-auto px-8 py-20">
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="text-4xl font-bold text-center text-gray-900 w-full">Discover Teams</h2>
-          </div>
-          <div className="flex items-center justify-center mb-8">
-            <div className="flex items-center text-gray-600">
-              <Filter className="w-5 h-5 mr-2" />
-              <span className="text-lg font-medium">{filteredTeams.length} teams available</span>
-            </div>
-          </div>
+      {/* ---------------- TEAMS SECTION ---------------- */}
+      <div className="container mx-auto px-8 pb-20">
+        <h2 className="text-3xl font-semibold text-center mb-10">
+          {filteredTeams.length} Teams Available
+        </h2>
 
-          {filteredTeams.length === 0 ? (
-            <div className="text-center py-16">
-              <div className="text-gray-500 text-xl mb-4">
-                {searchTerm ? "No teams match your search" : "No teams available at the moment"}
-              </div>
-              <p className="text-gray-400">
-                {searchTerm ? "Try adjusting your search terms" : "Check back later for new team opportunities!"}
-              </p>
-              {searchTerm && (
-                <button onClick={() => setSearchTerm("")} className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                  Clear Search
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredTeams.map((team, index) => (
-                <TeamCard key={team._id || team.id || index} team={team} />
-              ))}
-            </div>
-          )}
+        {/* Vertical layout */}
+        <div className="flex flex-col gap-8 max-w-3xl mx-auto">
+          {filteredTeams.map((team, index) => (
+            <TeamCard key={team._id || index} team={team} />
+          ))}
         </div>
       </div>
+
       <Footer />
     </div>
   );
 };
 
-// Team Card Component - Corrected and made more robust
+export default TeamsPage;
+
+// ========================================================
+// PREMIUM VERTICAL TEAM CARD
+// ========================================================
+
 const TeamCard = ({ team }) => {
-    const handleLinkedInClick = () => {
-      if (team.linkedinProfile) {
-        window.open(team.linkedinProfile, "_blank");
-      }
-    };
-  
-    const handleEmailClick = () => {
-      if (team.email) {
-        window.location.href = `mailto:${team.email}`;
-      }
-    };
-  
-    const getDaysUntilExpiry = () => {
-      if (!team.expiryDate) return null;
-      const today = new Date();
-      const expiry = new Date(team.expiryDate);
-      const diffTime = expiry - today;
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      return diffDays;
-    };
-  
-    const daysUntilExpiry = getDaysUntilExpiry();
-  
-    // Helper to safely handle both array and string data for tags
-    const getTagsArray = (data) => {
-      if (!data) return [];
-      if (Array.isArray(data)) return data;
-      return data.split(",").map(item => item.trim());
-    };
-  
-    const domainTags = getTagsArray(team.domains);
-    const skillTags = getTagsArray(team.skillsNeeded);
-  
-    return (
-      <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border-0">
-        <div className="p-6">
-          <div className="flex justify-between items-start mb-4">
-            <span className="bg-red-500 text-white px-3 py-1 text-sm font-medium rounded-full">Active</span>
-            {daysUntilExpiry !== null && (
-              <span className="text-sm text-gray-500 font-medium">
-                {daysUntilExpiry >= 0 ? `${daysUntilExpiry} days left` : "Expired"}
-              </span>
-            )}
-          </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">{team.teamname || "Team Name"}</h3>
-          <p className="text-gray-600 mb-6 text-sm leading-relaxed">{team.message || "No message provided"}</p>
-  
-          {domainTags.length > 0 && (
-            <div className="mb-4">
-              <div className="flex flex-wrap gap-2">
-                {domainTags.map((domain, index) => (
-                  <span key={index} className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
-                    {domain}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-  
-          {skillTags.length > 0 && (
-            <div className="mb-4">
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Skills Required:</h4>
-              <div className="flex flex-wrap gap-2">
-                {skillTags.map((skill, index) => (
-                  <span key={index} className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-  
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center text-gray-600">
-              <Users className="w-4 h-4 mr-2 text-blue-600" />
-              <span className="text-sm font-medium">
-                {team.currentMembers || 0} current • Need {team.requiredMembers || 0} more
-              </span>
-            </div>
-          </div>
-  
-          <div className="border-t border-gray-200 pt-4">
-            <h4 className="text-sm font-medium text-gray-700 mb-3">Contact Team</h4>
-            <div className="flex space-x-3">
-              {team.linkedinProfile && (
-                <button onClick={handleLinkedInClick} className="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors flex-1 justify-center">
-                  <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
-                </button>
-              )}
-              {team.email && (
-                <button onClick={handleEmailClick} className="flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors flex-1 justify-center">
-                  <Mail className="w-4 h-4 mr-2" /> Email
-                </button>
-              )}
-            </div>
-            {!team.linkedinProfile && !team.email && (
-              <div className="text-center py-2 text-gray-500 text-sm">No contact information available</div>
-            )}
-          </div>
+  const navigate = useNavigate();
+  if (!team) return null;
+
+  const getTags = (x) => (Array.isArray(x) ? x : x?.split(",") || []);
+
+  const handleChat = async () => {
+    try {
+      const token = getAuthToken();
+
+      const res = await fetch(
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/chat/conversation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId: team.postedBy._id }),
+        }
+      );
+
+      const convo = await res.json();
+      navigate(`/chat/${convo._id}`);
+    } catch (err) {
+      console.error("CHAT ERROR:", err);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.005 }}
+      transition={{ duration: 0.25 }}
+      className="
+        w-full
+        bg-white 
+        rounded-3xl 
+        border 
+        border-gray-200 
+        p-6 
+        shadow-sm 
+        hover:shadow-md 
+        transition-all
+      "
+    >
+      {/* ---------------- Header ---------------- */}
+      <div className="flex items-start justify-between mb-5">
+        <div>
+          <h3 className="text-2xl font-bold text-gray-900">{team.teamname}</h3>
+          <p className="text-gray-600 text-sm mt-1">{team.message}</p>
+        </div>
+
+        <div className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">
+          <Users className="w-4 h-4" />
+          {team.currentMembers}/{team.requiredMembers}
         </div>
       </div>
-    );
-  };
-  
-export default TeamsPage;
+
+      <div className="h-px w-full bg-gradient-to-r from-gray-200 to-gray-100 mb-4"></div>
+
+      {/* ---------------- Domains ---------------- */}
+      {team.domains && (
+        <div className="mb-4">
+          <p className="text-xs text-gray-400 mb-1">Domains</p>
+          <div className="flex flex-wrap gap-2">
+            {getTags(team.domains).map((d, i) => (
+              <span
+                key={i}
+                className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full"
+              >
+                {d}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ---------------- Skills ---------------- */}
+      <div className="mb-4">
+        <p className="text-xs text-gray-400 mb-1">Skills Needed</p>
+        <div className="flex flex-wrap gap-2">
+          {getTags(team.skillsNeeded).map((s, i) => (
+            <span
+              key={i}
+              className="px-3 py-1 bg-purple-50 text-purple-700 text-xs rounded-full"
+            >
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ---------------- Footer ---------------- */}
+      <div className="flex items-center justify-between mt-6">
+        {/* Leader Info */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-lg font-medium">
+            {team.postedBy.name[0]}
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-gray-800">
+              {team.postedBy.name}
+            </p>
+            <p className="text-xs text-gray-400">Team Leader</p>
+          </div>
+        </div>
+
+        {/* Chat Button */}
+        <motion.button
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={handleChat}
+          className="
+            bg-gradient-to-r 
+            from-purple-600 
+            to-indigo-600 
+            text-white 
+            px-5 
+            py-2 
+            rounded-xl 
+            text-sm 
+            font-medium 
+            shadow-md
+          "
+        >
+          <div className="flex items-center gap-2">
+            <MessageCircle className="w-4 h-4" />
+            Chat
+          </div>
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+};

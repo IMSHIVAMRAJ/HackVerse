@@ -35,6 +35,18 @@ various profile of persons looking for a team - it will be a card that would con
 it will contain various teams looking for member - it will be a card that contain team name , their msg , their requirements and linkdein account to connect
 
 
+FIND MEMBER - 
+ LIST OF ALL MEMBERS , THEIR WILL BE A OPTION TO ON IF YOU ARE LOOKING FOR A TEAM
+
+CHAT OPTION NEXT TO TEAM LEADER WHO HAS MADE THE REQUIREMENT SO THAT ANY MEMBER CAN CHAT WITH HIM
+DIRECTLY CLICKING ON THAT 
+
+ALSO A CHAT BUTTON NEXT TO MEMBER SO THAT LEADER CAN CHAT WITH THEM 
+
+MENTORSHIP SCHEDULING IN WHICH U CAN TALK TO YOUR MENTOR - COMING sOON  
+
+IDEA VALIDATOR USING OPEN AI API SO THAT USER CAN VALIDATE THEIR IDEA FOR ANY hackathons
+
 
 
             

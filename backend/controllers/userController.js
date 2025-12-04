@@ -47,3 +47,33 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({ message: "Failed to update profile", error });
   }
 };
+
+exports.getWantTeamMembers = async (req, res) => {
+  try {
+    const users = await User.find({ wantTeam: true })
+      .select('name contact email linkedin skills profilePic designation areaOfSpecialization membershipType createdAt');
+    res.json(users);
+  } catch (error) {
+    console.error("Get want-team members error:", error);
+    res.status(500).json({ message: "Failed to fetch want-team members", error: error.message });
+  }
+};
+
+exports.toggleWantTeam = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    if (typeof req.body.wantTeam === 'boolean') {
+      user.wantTeam = req.body.wantTeam;
+    } else {
+      user.wantTeam = !user.wantTeam;
+    }
+
+    await user.save();
+    res.json({ message: 'wantTeam updated', wantTeam: user.wantTeam });
+  } catch (error) {
+    console.error("Toggle wantTeam error:", error);
+    res.status(500).json({ message: "Failed to update wantTeam", error: error.message });
+  }
+};

@@ -1,1 +1,257 @@
 @import "tailwindcss";
+
+/* ========= Quick overflow fix (paste at top of index.css) ========= */
+html, body, #root {
+  overflow-x: hidden !important;    /* disable horizontal scroll */
+  overflow-y: scroll;               /* reserve vertical scrollbar space */
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-gutter: stable;         /* reduce layout shift where supported */
+}
+
+/* consistent box sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ==================== BLOB ANIMATION ==================== */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* ==================== GRID ANIMATION ==================== */
+@keyframes gridMove {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(50px);
+  }
+}
+
+.animate-grid-move {
+  animation: gridMove 20s linear infinite;
+}
+
+/* ==================== SUBTLE GLOW EFFECT ==================== */
+@keyframes subtleGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px rgba(168, 85, 247, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
+      0 0 15px rgba(147, 51, 234, 0.3);
+  }
+}
+
+.animate-subtle-glow {
+  animation: subtleGlow 3s ease-in-out infinite;
+}
+
+/* ==================== ROTATING GRADIENT BORDER ==================== */
+@keyframes rotateGradient {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.animate-rotate-gradient {
+  background-size: 200% 200%;
+  animation: rotateGradient 3s ease-in-out infinite;
+}
+
+/* ==================== GLITCH EFFECT ==================== */
+@keyframes glitch-1 {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    text-shadow: -2px 0 #00ff00, 2px 2px #ff00ff;
+  }
+  20%,
+  24%,
+  55% {
+    text-shadow: 2px 0 #ff00ff, -2px 2px #00ff00;
+  }
+}
+
+@keyframes glitch-2 {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    transform: translate(-2px, -2px);
+  }
+  20%,
+  24%,
+  55% {
+    clip-path: polygon(0% 20%, 100% 0%, 100% 100%, 0% 80%);
+    transform: translate(2px, 2px);
+  }
+}
+
+@keyframes glitch-3 {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    clip-path: polygon(0% 0%, 100% 20%, 100% 100%, 0% 80%);
+    transform: translate(0, 2px);
+  }
+  20%,
+  24%,
+  55% {
+    clip-path: polygon(0% 10%, 100% 0%, 100% 90%, 0% 100%);
+    transform: translate(-2px, 0);
+  }
+}
+
+.animate-glitch-1 {
+  animation: glitch-1 0.3s infinite;
+}
+
+.animate-glitch-2 {
+  animation: glitch-2 0.3s infinite;
+}
+
+.animate-glitch-3 {
+  animation: glitch-3 0.3s infinite;
+}
+
+/* ==================== PULSE & GLOW ==================== */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(34, 211, 238, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.8);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ==================== CYBER SCAN ==================== */
+@keyframes scanline {
+  0% {
+    top: -100%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+.animate-scanline {
+  animation: scanline 6s linear infinite;
+}
+
+/* ==================== FLOAT ANIMATION ==================== */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ==================== NEON BORDER ==================== */
+@keyframes neon-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, inset 0 0 5px #00ff00;
+  }
+  50% {
+    box-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00, inset 0 0 10px #00ff00;
+  }
+}
+
+.animate-neon-glow {
+  animation: neon-glow 2s ease-in-out infinite;
+}
+
+/* ==================== SHIMMER ==================== */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* ==================== CYBER STYLE UTILITIES ==================== */
+.cyber-text {
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.8),
+    0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.cyber-border {
+  border-image: linear-gradient(45deg, #00ff00, #00ffff, #ff00ff) 1;
+}
+
+/* ==================== SCROLL-BASED ANIMATIONS ==================== */
+@layer utilities {
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+}
