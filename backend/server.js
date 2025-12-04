@@ -86,7 +86,7 @@ app.use('/api/requirements', require('./routes/requirementRoutes'));
 app.use("/api/chat", require("./routes/chatRoutes"));
 app.use('/api/ideas', require("./routes/ideaRoutes"));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
-const PORT = process.env.PORT || 5000 || 5001;
+const PORT = process.env.PORT || 5000 ;
 
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server + Socket.io running on http://localhost:${PORT}`);
