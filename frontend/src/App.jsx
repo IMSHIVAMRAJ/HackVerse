@@ -9,7 +9,13 @@ import RequirementsPage from './pages/RequirementPage'
 import ProfilePage from './pages/ProfilePage'
 import ChatsList from './pages/ChatsList'
 import ChatPage from './pages/ChatPage'
+import IdeaValidator from './pages/IdeaValidator'
 
+import MentorRegister from './pages/MentorRegister';
+import MentorLogin from './pages/MentorLogin';
+import MentorDashboard from './pages/MentorDashboard';
+import MentorList from './pages/MentorList';
+import UserBookingPage from './pages/UserBookingPage'
 const App = () => {
   return (
     <BrowserRouter>
@@ -50,6 +56,21 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+           <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+<Route path="/book/:mentorId" element={<UserBookingPage />} />
+<Route path="/mentors" element={<MentorList />} />
+<Route path="/mentor/register" element={<MentorRegister />} />
+<Route path="/mentor/login" element={<MentorLogin />} />
+<Route path="/mentor/dashboard" element={<MentorDashboard />} />
+<Route path="/mentor/dashboard" element={<MentorDashboard />} />
+<Route path="/idea-validator" element={<IdeaValidator />} />
         <Route path="/chat/:conversationId" element={<ChatPage />} />
 <Route path="/chats" element={<ChatsList />} />
         

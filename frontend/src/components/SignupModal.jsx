@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { setAuthToken } from "../utils/auth"; // 👈 IMPORTED
@@ -118,14 +119,13 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      
+
       // 👇 **THE FIX IS HERE** 👇
       // Get the token from the response and save it to localStorage
       const { token } = res.data; // Adjust 'token' if your backend sends a different key
       setAuthToken(token);
       // --------------------------
 
-     
       alert("Signup successful!");
       onClose();
       navigate("/dashboard"); // This will now work correctly
@@ -170,10 +170,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       </div>
 
       <div className="space-y-2">
-        <label
-          htmlFor="password"
-          className="text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="password" className="text-sm font-medium text-gray-700">
           Password *
         </label>
         <input
@@ -292,10 +289,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       </div>
 
       <div className="space-y-2">
-        <label
-          htmlFor="linkedin"
-          className="text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="linkedin" className="text-sm font-medium text-gray-700">
           LinkedIn Profile
         </label>
         <input
@@ -400,6 +394,75 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Animated Stickers */}
+      <motion.div
+        className="hidden lg:block absolute top-8 left-8 z-0"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 80 80"
+          fill="none"
+          className="w-16 h-16 text-purple-400"
+        >
+          <circle
+            cx="40"
+            cy="40"
+            r="32"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            opacity="0.6"
+          />
+          <circle
+            cx="40"
+            cy="40"
+            r="24"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            opacity="0.4"
+          />
+          <circle
+            cx="40"
+            cy="40"
+            r="16"
+            stroke="currentColor"
+            strokeWidth="1"
+            opacity="0.3"
+          />
+          <circle cx="40" cy="40" r="4" fill="currentColor" opacity="0.8" />
+        </svg>
+      </motion.div>
+      <motion.div
+        className="hidden lg:block absolute bottom-12 right-8 z-0"
+        animate={{ rotate: -360, scale: [1, 1.15, 1] }}
+        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 80 80"
+          fill="none"
+          className="w-16 h-16 text-blue-400"
+        >
+          <rect
+            x="32"
+            y="35"
+            width="16"
+            height="18"
+            rx="2"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            opacity="0.7"
+          />
+          <circle cx="40" cy="50" r="1.5" fill="currentColor" opacity="0.6" />
+        </svg>
+      </motion.div>
+      {/* Subtle Animated Blobs */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob" />
+      <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000" />
+      <div className="absolute -bottom-10 left-1/2 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-blob animation-delay-4000" />
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/50 backdrop-blur-sm"
@@ -407,8 +470,13 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       />
 
       {/* Modal Content */}
-      <div className="relative z-50 w-full max-w-[500px] mx-4 max-h-[90vh] overflow-y-auto">
-        <div className="relative bg-white rounded-lg shadow-xl overflow-hidden">
+      <motion.div
+        className="relative z-50 w-full max-w-[500px] mx-4 max-h-[90vh] overflow-y-auto"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="relative bg-white/90 rounded-2xl shadow-2xl overflow-hidden border border-purple-100/40 backdrop-blur-md">
           <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-8">
             {/* Header */}
             <div className="text-center mb-6">
@@ -471,7 +539,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

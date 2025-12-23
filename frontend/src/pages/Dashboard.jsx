@@ -126,10 +126,6 @@ const Dashboard = () => {
 
   const [wantTeam, setWantTeam] = useState(false);
 
-  // NEW STATE FOR TOAST/POP-UP
-  const [toastVisible, setToastVisible] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-
   // Saved idea UI states
   const [ideasLoading, setIdeasLoading] = useState(false);
   const [showIdeaForm, setShowIdeaForm] = useState(false);
@@ -141,23 +137,9 @@ const Dashboard = () => {
   const BASE =
     import.meta.env.VITE_REACT_APP_BACKEND_BASEURL || "http://localhost:5000";
 
-  /* ------------------------------------------------------
-        FEATURE HANDLER FOR COMING SOON (MODIFIED)
-  ------------------------------------------------------ */
-  const handleFeatureComingSoon = (featureName, navigatePath) => {
-    // Features marked as "Coming Soon"
-    if (featureName === "Validate Idea" || featureName === "Mentorship") {
-      setToastMessage(`"${featureName}" is Coming Soon!`);
-      setToastVisible(true);
-
-      // Hide the toast after a few seconds
-      setTimeout(() => {
-        setToastVisible(false);
-      }, 3000);
-    } else {
-      // For other features, navigate as usual
-      navigate(navigatePath);
-    }
+  // Direct navigation for all features
+  const handleFeatureNavigate = (featureName, navigatePath) => {
+    navigate(navigatePath);
   };
 
   /* ------------------------------------------------------
@@ -549,9 +531,6 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#f6f8ff] to-[#eef2ff] overflow-x-hidden">
       <NavbarH userProfile={{ name: user?.name }} />
 
-      {/* RENDER THE TOAST COMPONENT */}
-      <Toast message={toastMessage} isVisible={toastVisible} />
-
       <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -614,7 +593,7 @@ const Dashboard = () => {
                 desc="AI powered"
                 icon={<Lightbulb />}
                 onClick={() =>
-                  handleFeatureComingSoon("Validate Idea", "/validate")
+                  handleFeatureNavigate("Validate Idea", "/idea-validator")
                 }
               />
 
@@ -629,9 +608,7 @@ const Dashboard = () => {
                 title="Mentorship"
                 desc="Book mentor"
                 icon={<Calendar />}
-                onClick={() =>
-                  handleFeatureComingSoon("Mentorship", "/mentorship")
-                }
+                onClick={() => handleFeatureNavigate("Mentorship", "/mentors")}
               />
             </div>
 
